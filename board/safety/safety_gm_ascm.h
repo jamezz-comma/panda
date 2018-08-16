@@ -9,7 +9,7 @@ static int gm_ascm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
 
     // do not propagate lkas messages from ascm to actuators
     // block 0x180 from ASCM for steering torque control
-    if ((addr == 0x180)) {
+    if (addr == 0x180) {
       int lkas_on = 0;
       if (!lkas_on) return -1;
     }
