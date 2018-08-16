@@ -64,7 +64,7 @@ static void gm_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
   }
 
   // check if stock ASCM ECU is still online
-  if (bus_number == 0 && addr == 715) {
+  if (bus_number == 0 && addr == 0x180) {
     gm_ascm_detected = 1;
     controls_allowed = 0;
   }
