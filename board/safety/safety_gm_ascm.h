@@ -11,7 +11,7 @@ static int gm_ascm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
     if (addr == 0xf1) {
       // EBCMBrakePedalPosition: The brake sensor sucks and the ASCM gets mad
       // So force the sensor to read 0 if it's "close enough"
-      uint8_t pedal = (to_fwd->RDLR >> 8) & 0xF;
+      uint8_t pedal = (to_fwd->RDLR >> 8) & 0xFF;
       if (pedal < 10) {
         to_fwd->RDLR &= 0xFF0F; // Force position to 0
         to_fwd->RDHR |= 0x000F; // Checksum at position 0
