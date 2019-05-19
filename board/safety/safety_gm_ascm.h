@@ -23,8 +23,8 @@ static int gm_ascm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
       // EBCMBrakePedalPosition
       uint8_t pedal = (to_fwd->RDLR >> 8) & 0xF;
       if (pedal < 10) {
-        to_fwd->RDLR &= 0xF0FF; // Force position to 0
-        to_fwd->RDHR |= 0xFF00; // Checksum at position 0
+        to_fwd->RDLR &= 0xFF0F; // Force position to 0
+        to_fwd->RDHR |= 0x000F; // Checksum at position 0
       }
     }
 
