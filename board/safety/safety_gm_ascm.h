@@ -7,6 +7,17 @@ static int gm_ascm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
 
   if (bus_num == 0) {
     //Forward all messages in this direction
+
+    if (addr == 0xf1) {
+      // EBCMBrakePedalPosition: The brake sensor sucks and the ASCM gets mad
+      // So force the sensor to read 0 if it's "close enough"
+      uint8_t pedal = (to_fwd->RDLR >> 8) & 0xF;
+      if (pedal < 10) {
+        to_fwd->RDLR &= 0xFF0F; // Force position to 0
+        to_fwd->RDHR |= 0x000F; // Checksum at position 0
+      }
+    }
+
     return 2;
   }
 
@@ -17,15 +28,6 @@ static int gm_ascm_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
     // Drop all steering messages
     if ((addr == 384)) {
         return -1;
-    }
-
-    if (addr == 0xf1) {
-      // EBCMBrakePedalPosition
-      uint8_t pedal = (to_fwd->RDLR >> 8) & 0xF;
-      if (pedal < 10) {
-        to_fwd->RDLR &= 0xFF0F; // Force position to 0
-        to_fwd->RDHR |= 0x000F; // Checksum at position 0
-      }
     }
 
     return 0;
